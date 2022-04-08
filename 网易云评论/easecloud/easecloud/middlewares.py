@@ -2,11 +2,14 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
+import random,time
+from .settings import USER_AGENT_LIST
 from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+import logging
+log = logging.getLogger(__name__)
 
 
 class EasecloudSpiderMiddleware:
@@ -61,6 +64,7 @@ class EasecloudDownloaderMiddleware:
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
 
+
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
@@ -78,6 +82,7 @@ class EasecloudDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+        request.headers['User-Agent'] = random.choice(USER_AGENT_LIST)
         return None
 
     def process_response(self, request, response, spider):
